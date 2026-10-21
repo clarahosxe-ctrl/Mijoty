@@ -484,6 +484,11 @@
     input[type=text],input[type=number],textarea,select,.search{font-size:16px;} /* évite le zoom iOS */
     .modal-actions{flex-wrap:wrap;}
   }
+  .select-dot::after{content:'';position:absolute;inset:-10px;}
+  .servctl button{width:36px;height:36px;}
+  :focus-visible{outline:2px solid var(--indigo);outline-offset:2px;}
+  .card:focus-visible{outline-offset:3px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
   @media (display-mode:standalone){ .install-hint{display:none !important;} }
 
   /* ---- Look moderne : sans empattement, formes douces ---- */
@@ -2477,7 +2482,7 @@ async function loadRecipes(){
   try{
     const res = await window.storage.get(STORAGE_KEY, false);
     if(res && res.value){
-      recipes = JSON.parse(res.value);
+      recipes = JSON.parse(res.value).map(sanitizeRecipe).filter(Boolean);
     } else {
       recipes = seedRecipes;
       await persist();
@@ -2601,8 +2606,8 @@ function render(){
     return;
   }
   grid.innerHTML = list.map(r => `
-    <div class="card ${selectedIds.has(r.id)?'selected':''}" data-id="${r.id}">
-      <span class="select-dot ${selectedIds.has(r.id)?'checked':''}" data-select="${r.id}" title="Ajouter à ma liste de courses">✓</span>
+    <div class="card ${selectedIds.has(r.id)?'selected':''}" data-id="${r.id}" role="button" tabindex="0" aria-label="${escapeHtml(r.name)}">
+      <span class="select-dot ${selectedIds.has(r.id)?'checked':''}" data-select="${r.id}" role="checkbox" aria-checked="${selectedIds.has(r.id)}" aria-label="Ajouter à ma liste de courses" tabindex="0" title="Ajouter à ma liste de courses">✓</span>
       ${r.image ? `<div class="thumb"><img src="${r.image}" alt=""></div>` : ''}
       <span class="tag tag-${r.category}">${CATS[r.category]}${(r.subcategories&&r.subcategories.length) ? ' · ' + r.subcategories.join(', ') : ''}</span>
       <h3>${escapeHtml(r.name)}</h3>
@@ -2617,6 +2622,12 @@ function render(){
   grid.querySelectorAll('.card').forEach(card=>{
     card.addEventListener('click', ()=> openDetail(card.dataset.id));
   });
+  grid.querySelectorAll('.card, .select-dot').forEach(el=>{
+    el.addEventListener('keydown', (e)=>{
+      if(e.key!=='Enter' && e.key!==' ') return;
+      e.preventDefault(); e.stopPropagation(); el.click();
+    });
+  });
   grid.querySelectorAll('.select-dot').forEach(dot=>{
     dot.addEventListener('click', (e)=>{
       e.stopPropagation();
@@ -2625,7 +2636,29 @@ function render(){
   });
 }
 
+function sanitizeRecipe(r){
+  if(!r || typeof r !== 'object') return null;
+  const str = v => (v==null ? '' : String(v)).trim();
+  const num = v => { const n = Math.round(Number(v)); return isFinite(n) && n>=0 ? Math.min(n, 99999) : 0; };
+  const list = v => Array.isArray(v) ? v.map(str).filter(Boolean) : [];
+  const name = str(r.name);
+  if(!name) return null;
+  const category = ['petitdej','repas','desserts'].includes(r.category) ? r.category : 'repas';
+  const m = r.macros || {};
+  const img = typeof r.image === 'string' && /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(r.image) ? r.image : null;
+  return {
+    id: /^[\w-]{1,64}$/.test(str(r.id)) ? str(r.id) : uid(),
+    category, name, image: img,
+    subcategories: list(r.subcategories).filter(x => (SUBCATS[category]||[]).includes(x)),
+    servings: Math.max(1, num(r.servings) || 1),
+    macros: { kcal:num(m.kcal), protein:num(m.protein), carbs:num(m.carbs), fat:num(m.fat) },
+    ingredients: list(r.ingredients), steps: list(r.steps), toppings: list(r.toppings),
+    notes: str(r.notes)
+  };
+}
+
 function escapeHtml(s){
+  s = String(s);
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
@@ -3035,9 +3068,9 @@ document.getElementById('importJsonFile').addEventListener('change', async (e)=>
     const list = Array.isArray(data) ? data : data.recipes;
     if(!Array.isArray(list)) throw new Error('format');
     const known = new Set(recipes.map(r=>r.id));
-    const toAdd = list.filter(r=>r && r.name && !known.has(r.id));
+    const toAdd = list.map(sanitizeRecipe).filter(r=>r && !known.has(r.id));
     if(!toAdd.length){ alert("Aucune nouvelle recette dans ce fichier."); return; }
-    recipes.push(...toAdd.map(r=>({ id:r.id||uid(), subcategories:[], ingredients:[], steps:[], toppings:[], notes:'', servings:1, macros:{kcal:0,protein:0,carbs:0,fat:0}, category:'repas', ...r })));
+    recipes.push(...toAdd);
     await persist(); render();
     alert(`${toAdd.length} recette${toAdd.length>1?'s importées':' importée'}.`);
   }catch(err){ alert("Fichier illisible : choisis un export JSON de ce carnet."); }
@@ -3059,6 +3092,18 @@ document.getElementById('settingsSave').addEventListener('click', ()=>{
   const m = document.getElementById('s_model').value.trim();
   lsSet(MODEL_STORAGE, m && m !== DEFAULT_MODEL ? m : '');
   closeSettings();
+});
+
+/* ---- Accessibilité : dialogues, bouton Fermer, touche Échap ---- */
+document.querySelectorAll('.overlay').forEach(o=>{ o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true'); });
+new MutationObserver(()=>{
+  document.querySelectorAll('.close:not([aria-label])').forEach(b=>b.setAttribute('aria-label','Fermer'));
+}).observe(document.body,{childList:true,subtree:true});
+document.querySelectorAll('.close').forEach(b=>b.setAttribute('aria-label','Fermer'));
+document.addEventListener('keydown', (e)=>{
+  if(e.key!=='Escape') return;
+  const open = Array.from(document.querySelectorAll('.overlay.open')).pop();
+  if(open) open.dispatchEvent(new MouseEvent('click',{bubbles:true}));
 });
 
 /* ---- PWA : hors ligne + stockage durable ---- */

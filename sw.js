@@ -1,4 +1,4 @@
-const CACHE = 'carnet-recettes-v2';
+const CACHE = 'carnet-recettes-v3';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './fonts/fonts.css', './fonts/Inter.woff2',
@@ -17,10 +17,18 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Cache d'abord, réseau en secours (l'API Anthropic n'est jamais interceptée).
+// Ressources : cache d'abord, réseau en secours (l'API Anthropic n'est jamais interceptée).
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  // Pages : réseau d'abord (les mises à jour arrivent seules), cache en secours hors ligne.
+  if(req.mode === 'navigate'){
+    e.respondWith(
+      fetch(req).then(res => { const c = res.clone(); caches.open(CACHE).then(k => k.put('./index.html', c)); return res; })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
   e.respondWith(
     caches.match(req, { ignoreSearch: true }).then(hit => hit || fetch(req).then(res => {
       const copy = res.clone();
