@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Mijoty">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
+<script src="config.js"></script>
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Mijoty</title>
@@ -681,13 +682,12 @@
   <div class="modal" style="max-width:520px;">
     <div class="modal-head"><h2>Réglages</h2><button class="close" id="settingsClose">✕</button></div>
     <div class="section-title">Import par capture d'écran (IA)</div>
-    <div class="hint">Pour analyser des captures avec Claude, colle ta clé API Anthropic. Elle reste uniquement sur ce téléphone.</div>
-    <label>Clé API Anthropic</label>
-    <input type="text" id="s_apiKey" placeholder="sk-ant-..." autocomplete="off" autocapitalize="off" spellcheck="false">
-    <label>Modèle</label>
-    <input type="text" id="s_model" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="hint" id="s_aiStatus"></div>
+    <label>Adresse du service d'analyse</label>
+    <input type="text" id="s_aiUrl" placeholder="https://mijoty-ia.xxx.workers.dev" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url">
+    <div class="hint">Aucune clé à saisir : elle reste sur le service, pas sur le téléphone.</div>
     <div class="section-title">Données</div>
-    <div class="hint" id="s_version" style="margin-bottom:6px;">Mijoty · version 15</div>
+    <div class="hint" id="s_version" style="margin-bottom:6px;">Mijoty · version 16</div>
     <div class="hint" id="s_storageInfo">Tes recettes et ta semaine sont enregistrées sur cet appareil. Exporte-les de temps en temps pour garder une sauvegarde, ou pour les retrouver sur un autre téléphone.</div>
     <div class="data-btns">
       <button class="btn ghost" id="exportBtn" type="button">⬇ Exporter mes données</button>
@@ -847,9 +847,8 @@ const SUBCATS = {
 const STORAGE_KEY = "carnet-recettes-data";
 const WEEK_STORAGE_KEY = "carnet-recettes-weekplan";
 const WEEK_SHOP_STORAGE_KEY = "carnet-recettes-weekshop-checked";
-const API_KEY_STORAGE = "carnet-recettes-apikey";
-const MODEL_STORAGE = "carnet-recettes-model";
-const DEFAULT_MODEL = "claude-sonnet-5-5";
+const AI_URL_STORAGE = "mijoty-ai-url";
+function aiUrl(){ return (lsGet(AI_URL_STORAGE) || (window.MIJOTY_CONFIG && window.MIJOTY_CONFIG.aiProxyUrl) || '').trim(); }
 function lsGet(k){ try{ return localStorage.getItem(k) || ''; }catch(e){ return ''; } }
 function lsSet(k,v){ try{ if(v) localStorage.setItem(k,v); else localStorage.removeItem(k); }catch(e){} }
 
@@ -1258,51 +1257,13 @@ function findSimilarRecipe(name){
   });
 }
 
-const IMPORT_PROMPT = `Tu extrais une ou plusieurs recettes de cuisine à partir de captures d'écran (Instagram ou autre).
-
-RÈGLES STRICTES :
-1. N'extrais QUE le contenu factuel (ingrédients, quantités, étapes de préparation). Ne recopie JAMAIS une légende/texte d'accroche mot pour mot ; reformule entièrement en français avec un style neutre de fiche recette.
-2. Si un ingrédient contient de la viande, des crevettes ou d'autres fruits de mer, remplace-le par une alternative végétarienne (tofu, tofu fumé, légumineuses, steak végétal, champignons...) et signale la substitution dans "notes".
-3. Le thon et le saumon CUIT restent inchangés. Si l'ingrédient est du saumon FUMÉ (ou du poisson cru/fumé en général), remplace-le par du thon et signale-le dans "notes".
-4. Si des macros (kcal/protéines/glucides/lipides) sont indiquées dans le post, reprends-les. Sinon, estime-les à partir des ingrédients avec des valeurs nutritionnelles standards.
-5. Une image peut contenir plusieurs recettes distinctes, et une recette peut être répartie sur plusieurs images (à recomposer en une seule).
-6. "category" doit être exactement l'une de : "petitdej", "repas", "desserts".
-7. "subcategories" doit être un sous-ensemble de la liste correspondante :
-   - petitdej: ["Sucré","Salé"]
-   - repas: ["Salade / Bowl","Réconfortant","Chaud","Froid"]
-   - desserts: ["Gourmand","Sain / protéiné"]
-
-Réponds STRICTEMENT en JSON, sans aucun texte avant/après, sans balises markdown. Si tu identifies une seule recette, réponds avec un objet JSON unique. Si tu en identifies plusieurs, réponds avec un tableau JSON d'objets. Chaque objet doit suivre exactement ce schéma :
-{
-  "name": string,
-  "category": "petitdej" | "repas" | "desserts",
-  "subcategories": string[],
-  "servings": number,
-  "macros": {"kcal": number, "protein": number, "carbs": number, "fat": number},
-  "ingredients": string[],
-  "steps": string[],
-  "toppings": string[],
-  "notes": string
-}`;
-
 async function callClaudeVision(imageBlocks){
-  const apiKey = lsGet(API_KEY_STORAGE);
-  if(!apiKey){ throw new Error("NO_KEY"); }
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
+  const url = aiUrl();
+  if(!url){ throw new Error("NO_AI"); }
+  const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: lsGet(MODEL_STORAGE) || DEFAULT_MODEL,
-      max_tokens: 4000,
-      messages: [
-        { role: "user", content: [...imageBlocks, { type: "text", text: IMPORT_PROMPT }] }
-      ]
-    })
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ images: imageBlocks.map(b => ({ media_type: b.source.media_type, data: b.source.data })) })
   });
   const data = await response.json();
   if(!response.ok){ throw new Error((data.error && data.error.message) || ("HTTP " + response.status)); }
@@ -1401,9 +1362,9 @@ document.getElementById('analyzeBtn').addEventListener('click', async ()=>{
       });
     }
   }catch(err){
-    statusEl.textContent = err && err.message === "NO_KEY"
-      ? "Ajoute d'abord ta clé API dans les réglages (⚙) pour utiliser l'import par capture."
-      : "Échec de l'analyse (" + ((err && err.message) || "erreur") + ") — vérifie la connexion, la clé API et l'image, ou renseigne la recette manuellement.";
+    statusEl.textContent = err && err.message === "NO_AI"
+      ? "L'analyse IA n'est pas encore activée : renseigne l'adresse du service dans les réglages (⚙)."
+      : "Échec de l'analyse (" + ((err && err.message) || "erreur") + ") — vérifie la connexion et l'image, ou renseigne la recette manuellement.";
   }finally{
     btn.disabled = false;
     btn.textContent = 'Analyser';
@@ -1492,8 +1453,8 @@ document.getElementById('importJsonFile').addEventListener('change', async (e)=>
 
 /* ---- Réglages ---- */
 function openSettings(){
-  document.getElementById('s_apiKey').value = lsGet(API_KEY_STORAGE);
-  document.getElementById('s_model').value = lsGet(MODEL_STORAGE) || DEFAULT_MODEL;
+  document.getElementById('s_aiUrl').value = aiUrl();
+  document.getElementById('s_aiStatus').textContent = aiUrl() ? "✓ Analyse IA activée : ajoute une capture dans « Nouvelle recette »." : "Analyse IA non activée. Renseigne l'adresse du service pour importer une recette depuis une capture d'écran.";
   document.getElementById('settingsOverlay').classList.add('open');
 }
 function closeSettings(){ document.getElementById('settingsOverlay').classList.remove('open'); }
@@ -1502,9 +1463,9 @@ document.getElementById('settingsClose').addEventListener('click', closeSettings
 document.getElementById('settingsCancel').addEventListener('click', closeSettings);
 document.getElementById('settingsOverlay').addEventListener('click', (e)=>{ if(e.target.id==='settingsOverlay') closeSettings(); });
 document.getElementById('settingsSave').addEventListener('click', ()=>{
-  lsSet(API_KEY_STORAGE, document.getElementById('s_apiKey').value.trim());
-  const m = document.getElementById('s_model').value.trim();
-  lsSet(MODEL_STORAGE, m && m !== DEFAULT_MODEL ? m : '');
+  const u = document.getElementById('s_aiUrl').value.trim();
+  const def = (window.MIJOTY_CONFIG && window.MIJOTY_CONFIG.aiProxyUrl) || '';
+  lsSet(AI_URL_STORAGE, u && u !== def ? u : '');
   closeSettings();
 });
 

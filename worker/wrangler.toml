@@ -1,0 +1,8 @@
+name = "mijoty-ia"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Adresses autorisées à appeler le service (celle où l'appli est publiée), séparées par des virgules.
+ALLOWED_ORIGINS = "https://clarahosxe-ctrl.github.io"
+# MODEL = "claude-sonnet-5-5"
