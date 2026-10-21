@@ -1,4 +1,4 @@
-const CACHE = 'carnet-recettes-v5';
+const CACHE = 'carnet-recettes-v6';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest', './recipes.json',
   './fonts/fonts.css', './fonts/Inter.woff2',
