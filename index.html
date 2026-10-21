@@ -608,6 +608,7 @@
     <label>Modèle</label>
     <input type="text" id="s_model" autocomplete="off" autocapitalize="off" spellcheck="false">
     <div class="section-title">Données</div>
+    <div class="hint" id="s_version" style="margin-bottom:6px;">Mijoty · version 11</div>
     <div class="hint" id="s_storageInfo">Les recettes sont enregistrées sur l'appareil. Pense à les exporter de temps en temps.</div>
     <div class="modal-actions"><button class="btn" id="settingsSave">Enregistrer</button><button class="btn ghost" id="settingsCancel">Fermer</button></div>
   </div>
@@ -1475,7 +1476,20 @@ document.addEventListener('keydown', (e)=>{
 
 /* ---- PWA : hors ligne + stockage durable ---- */
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
-  window.addEventListener('load', ()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  // Une nouvelle version prend la main : on recharge une seule fois pour l'afficher.
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+    if(!hadController || reloaded) return;
+    reloaded = true; location.reload();
+  });
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(reg=>{
+      reg.update().catch(()=>{});
+      // Vérifie aussi les mises à jour à chaque retour dans l'appli.
+      document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) reg.update().catch(()=>{}); });
+    }).catch(()=>{});
+  });
 }
 if(navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(()=>{}); }
 

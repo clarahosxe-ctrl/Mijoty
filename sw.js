@@ -1,4 +1,4 @@
-const CACHE = 'mijoty-v10';
+const CACHE = 'mijoty-v11';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest', './recipes.json',
   './fonts/fonts.css', './fonts/Inter.woff2',
@@ -25,7 +25,7 @@ self.addEventListener('fetch', e => {
   // Pages : réseau d'abord (les mises à jour arrivent seules), cache en secours hors ligne.
   if(req.mode === 'navigate'){
     e.respondWith(
-      fetch(req).then(res => { const c = res.clone(); caches.open(CACHE).then(k => k.put('./index.html', c)); return res; })
+      fetch(req, { cache: 'no-cache' }).then(res => { const c = res.clone(); caches.open(CACHE).then(k => k.put('./index.html', c)); return res; })
         .catch(() => caches.match('./index.html'))
     );
     return;
