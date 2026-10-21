@@ -518,6 +518,46 @@
   .footer-ill .ill{position:static;width:34px;height:34px;}
   .empty-ill{position:static;display:inline-block;width:46px;height:46px;margin:0 6px 8px;color:var(--teal);opacity:.5;}
   @media (max-width:600px){.head-ill{width:100px;height:72px;}}
+
+  /* ---- Accueil ---- */
+  #recipesView{display:none;}
+  body.view-recipes #homeView{display:none;}
+  body.view-recipes #recipesView{display:block;}
+  body.view-home .fab, body.view-home .selection-bar{display:none !important;}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+  .topbar .back{font:600 15px 'Inter',system-ui,sans-serif;color:var(--teal-dark);background:var(--teal-soft);border:none;border-radius:12px;padding:9px 14px;cursor:pointer;}
+  .topbar-title{font-size:22px;font-weight:700;letter-spacing:-0.02em;}
+  .home-search{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:400 15px 'Inter',system-ui,sans-serif;color:var(--ink-soft);
+    background:var(--paper);border:none;border-radius:16px;padding:15px 16px;box-shadow:var(--shadow);cursor:pointer;margin:6px 0 18px;}
+  .home-search svg{flex-shrink:0;color:var(--teal);}
+  .home-card{background:var(--paper);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px;position:relative;overflow:hidden;}
+  .home-label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:12px;}
+  .home-link{font:600 13px 'Inter',system-ui,sans-serif;text-transform:none;letter-spacing:0;color:var(--teal-dark);background:none;border:none;cursor:pointer;padding:4px 0;}
+  .idea{cursor:pointer;}
+  .idea .tag{display:block;margin-bottom:8px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+  .idea.c-petitdej .ill{color:var(--pink);} .idea.c-repas .ill{color:var(--indigo);} .idea.c-desserts .ill{color:var(--yellow);}
+  .idea h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;line-height:1.2;margin:0 0 12px;padding-right:70px;}
+  .idea .ill{right:14px;top:44px;width:64px;height:64px;opacity:.22;pointer-events:none;}
+  .idea .macro-row{border-top:1px dashed var(--line);}
+  .home-progress{height:8px;border-radius:99px;background:var(--cream);overflow:hidden;margin:2px 0 12px;}
+  .home-progress i{display:block;height:100%;background:var(--teal);border-radius:99px;transition:width .3s;}
+  .home-meta{font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
+  .home-row{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:none;border-top:1px solid var(--line);padding:11px 2px;font:500 14.5px 'Inter',system-ui,sans-serif;color:var(--ink);cursor:pointer;}
+  .home-row small{margin-left:auto;color:var(--ink-soft);font-weight:400;white-space:nowrap;}
+  .home-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .home-actions .btn{flex:1;}
+  .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+  .cat-card{position:relative;text-align:left;background:var(--paper);border:none;border-radius:20px;padding:14px 12px 12px;box-shadow:var(--shadow);cursor:pointer;min-height:118px;font-family:'Inter',system-ui,sans-serif;overflow:hidden;}
+  .cat-card .ill{position:static;width:46px;height:46px;margin-bottom:10px;opacity:.9;}
+  .cat-card.c-petitdej .ill{color:var(--pink);} .cat-card.c-repas .ill{color:var(--indigo);} .cat-card.c-desserts .ill{color:var(--yellow);}
+  .cat-card b{display:block;font-size:14px;font-weight:600;color:var(--ink);}
+  .cat-card span{font-size:12px;color:var(--ink-soft);}
+  .recent{display:flex;gap:10px;overflow-x:auto;margin:0 -18px;padding:0 18px 4px;scrollbar-width:none;}
+  .recent::-webkit-scrollbar{display:none;}
+  .recent button{flex:0 0 170px;text-align:left;background:var(--bg);border:none;border-radius:14px;padding:12px;font:500 14px 'Inter',system-ui,sans-serif;color:var(--ink);cursor:pointer;}
+  .recent button small{display:block;margin-top:4px;color:var(--ink-soft);font-weight:400;font-size:12px;}
+  .home-foot{display:flex;gap:8px;margin:6px 0 0;}
+  .home-foot .btn{flex:1;}
   @media (display-mode:standalone){ .install-hint{display:none !important;} }
 
   /* ---- Look moderne : sans empattement, formes douces ---- */
@@ -552,14 +592,22 @@
 <body>
 <div id="splash" aria-hidden="true"><div class="splash-stage"><i class="ill sp" style="--m:url(img/lemon.png);left:13.24%;top:6.82%;width:18.70%;aspect-ratio:202/227;animation-delay:0.10s"></i><i class="ill sp" style="--m:url(img/tomate.png);left:45.56%;top:10.16%;width:15.09%;aspect-ratio:163/164;animation-delay:0.16s"></i><i class="ill sp" style="--m:url(img/palmier.png);left:74.17%;top:5.62%;width:15.83%;aspect-ratio:171/222;animation-delay:0.22s"></i><i class="ill sp" style="--m:url(img/branche.png);left:19.07%;top:21.51%;width:16.76%;aspect-ratio:181/315;animation-delay:0.28s"></i><i class="ill sp" style="--m:url(img/olives.png);left:62.13%;top:25.73%;width:19.91%;aspect-ratio:215/256;animation-delay:0.34s"></i><i class="ill sp" style="--m:url(img/haricot.png);left:79.54%;top:34.17%;width:10.65%;aspect-ratio:115/269;animation-delay:0.40s"></i><i class="ill sp" style="--m:url(img/figue.png);left:64.81%;top:52.66%;width:18.70%;aspect-ratio:202/230;animation-delay:0.46s"></i><i class="ill sp" style="--m:url(img/raisin.png);left:25.37%;top:63.65%;width:27.69%;aspect-ratio:299/266;animation-delay:0.52s"></i><i class="ill sp" style="--m:url(img/tasse.png);left:59.35%;top:72.81%;width:18.24%;aspect-ratio:197/155;animation-delay:0.58s"></i><i class="ill sp" style="--m:url(img/citron-vert.png);left:15.83%;top:79.38%;width:18.06%;aspect-ratio:195/176;animation-delay:0.64s"></i><i class="ill sp" style="--m:url(img/farfalle.png);left:73.52%;top:84.27%;width:15.83%;aspect-ratio:171/128;animation-delay:0.70s"></i><img class="splash-logo" src="icons/logo-320.png" alt="" width="160" height="160"></div></div>
 <div class="wrap">
+ <section id="homeView">
   <header class="top">
     <div class="head-ill" aria-hidden="true"><i class="ill" style="--m:url(img/branche.png);left:0;top:0;width:44px;height:72px"></i><i class="ill" style="--m:url(img/citron-vert.png);left:52px;top:18px;width:56px;height:52px"></i></div>
     <img class="logo" src="icons/logo.png" alt="" width="56" height="56">
     <div class="eyebrow">Carnet de recettes</div>
     <h1>Mijoty</h1>
-    <div class="sub">Végétarien · œufs uniquement en préparation cuite · classées par moment du repas, avec les macros par portion.</div>
+    <div class="sub" id="homeSub">Que cuisine-t-on aujourd'hui ?</div>
   </header>
+  <div id="homeContent"></div>
+ </section>
 
+ <section id="recipesView">
+  <div class="topbar">
+    <button class="back" id="backHome" type="button" aria-label="Retour à l'accueil">‹ Accueil</button>
+    <span class="topbar-title">Recettes</span>
+  </div>
   <div class="tabs" id="tabs"></div>
   <div class="subtabs" id="subtabs"></div>
 
@@ -575,6 +623,7 @@
   <div id="grid" class="grid"></div>
   <div class="status" id="status"></div>
   <div class="footer-ill" aria-hidden="true"><i class="ill" style="--m:url(img/lemon.png)"></i><i class="ill" style="--m:url(img/olives.png)"></i><i class="ill" style="--m:url(img/figue.png)"></i><i class="ill" style="--m:url(img/raisin.png)"></i><i class="ill" style="--m:url(img/tasse.png)"></i><i class="ill" style="--m:url(img/farfalle.png)"></i></div>
+ </section>
 </div>
 
 <button class="fab" id="addFab" title="Ajouter une recette">+</button>
@@ -608,7 +657,7 @@
     <label>Modèle</label>
     <input type="text" id="s_model" autocomplete="off" autocapitalize="off" spellcheck="false">
     <div class="section-title">Données</div>
-    <div class="hint" id="s_version" style="margin-bottom:6px;">Mijoty · version 11</div>
+    <div class="hint" id="s_version" style="margin-bottom:6px;">Mijoty · version 12</div>
     <div class="hint" id="s_storageInfo">Les recettes sont enregistrées sur l'appareil. Pense à les exporter de temps en temps.</div>
     <div class="modal-actions"><button class="btn" id="settingsSave">Enregistrer</button><button class="btn ghost" id="settingsCancel">Fermer</button></div>
   </div>
@@ -835,6 +884,7 @@ async function loadWeekPlan(){
     weekPlan = [];
   }
   updateWeekBadge();
+  if(typeof renderHome==='function') renderHome();
 }
 
 async function persistWeekPlan(){
@@ -844,6 +894,7 @@ async function persistWeekPlan(){
     document.getElementById('status').textContent = "Échec de la sauvegarde du plan de la semaine.";
   }
   updateWeekBadge();
+  renderHome();
 }
 
 async function loadWeekShopChecked(){
@@ -912,6 +963,7 @@ function renderTabs(){
 
 function render(){
   renderTabs();
+  if(typeof renderHome==='function' && document.body.classList.contains('view-home')) renderHome();
   const grid = document.getElementById('grid');
   const q = document.getElementById('search').value.trim().toLowerCase();
   let list = recipes.filter(r => activeTab==='all' || r.category===activeTab);
@@ -1470,6 +1522,8 @@ document.addEventListener('keydown', (e)=>{
       top.dispatchEvent(new MouseEvent('click', {bubbles:true}));
       if(top.classList.contains('open')) top.classList.remove('open');
       popping = false;
+    } else if(window.__goHomeFromBack){
+      window.__goHomeFromBack();   // aucune fenêtre ouverte : Retour ramène à l'accueil
     }
   });
 })();
@@ -2146,6 +2200,155 @@ function copyShoppingList(items){
     alert(text);
   }
 }
+
+
+/* ===================== ACCUEIL ===================== */
+
+const HOME_ILL = { petitdej:'tasse2', repas:'assiette', desserts:'fraise' };
+const HOME_CAT_LABEL = { petitdej:"Petit-déj'", repas:'Repas', desserts:'Desserts' };
+let ideaId = null;
+let viewPushed = false;
+
+function greeting(){
+  const h = new Date().getHours();
+  return h < 5 || h >= 19 ? 'Bonsoir' : h < 12 ? 'Bonjour' : 'Bon appétit';
+}
+
+function pickIdea(forceRandom){
+  if(!recipes.length){ ideaId = null; return; }
+  if(forceRandom){
+    let r; do { r = recipes[Math.floor(Math.random()*recipes.length)]; } while(recipes.length>1 && r.id===ideaId);
+    ideaId = r.id; return;
+  }
+  if(ideaId && recipes.some(r=>r.id===ideaId)) return;
+  const d = new Date(); const seed = d.getFullYear()*400 + d.getMonth()*32 + d.getDate();
+  ideaId = recipes[seed % recipes.length].id;
+}
+
+function renderHome(){
+  const box = document.getElementById('homeContent');
+  if(!box) return;
+  document.querySelector('#homeView .eyebrow').textContent = greeting();
+  pickIdea(false);
+  const idea = recipes.find(r=>r.id===ideaId);
+
+  const counts = {petitdej:0, repas:0, desserts:0};
+  recipes.forEach(r => { if(counts[r.category]!==undefined) counts[r.category]++; });
+
+  const weekRows = weekPlan.map(it => ({it, r: recipes.find(x=>x.id===it.recipeId)})).filter(x=>x.r);
+  const done = weekRows.filter(x=>x.it.done).length;
+  const todo = weekRows.filter(x=>!x.it.done);
+  const recent = recipes.filter(r => !/^s\d+$/.test(String(r.id))).slice(-6).reverse();
+
+  const magnifier = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+
+  box.innerHTML = `
+    <button class="home-search" data-act="search" type="button">${magnifier}<span>Chercher une recette, un ingrédient…</span></button>
+
+    ${idea ? `
+    <section class="home-card idea c-${idea.category}" data-act="open" data-id="${escapeHtml(idea.id)}" role="button" tabindex="0">
+      <div class="home-label"><span>Idée du jour</span><button class="home-link" data-act="reroll" type="button">↻ Une autre</button></div>
+      <span class="tag tag-${idea.category}">${CATS[idea.category]}</span>
+      <h2>${escapeHtml(idea.name)}</h2>
+      ${illHtml(HOME_ILL[idea.category] || 'assiette')}
+      <div class="macro-row">
+        <span><b>${idea.macros.kcal}</b> kcal</span>
+        <span><b>${idea.macros.protein}g</b> prot</span>
+        <span><b>${idea.macros.carbs}g</b> gluc</span>
+        <span><b>${idea.macros.fat}g</b> lip</span>
+      </div>
+    </section>` : ''}
+
+    <section class="home-card">
+      <div class="home-label"><span>Cette semaine</span><button class="home-link" data-act="week" type="button">Ouvrir</button></div>
+      ${weekRows.length === 0 ? `
+        <div class="home-meta">Rien de prévu pour l'instant. Choisis des recettes dans le carnet, puis ajoute-les à ta semaine.</div>
+        <div class="home-actions"><button class="btn secondary" data-act="all" type="button">Parcourir les recettes</button></div>
+      ` : `
+        <div class="home-meta">${done} sur ${weekRows.length} recette${weekRows.length>1?'s':''} faite${done>1?'s':''}</div>
+        <div class="home-progress"><i style="width:${Math.round(done/weekRows.length*100)}%"></i></div>
+        ${todo.slice(0,3).map(x=>`<button class="home-row" data-act="open" data-id="${escapeHtml(x.r.id)}" type="button">${escapeHtml(x.r.name)}<small>${x.it.servings} p.</small></button>`).join('')}
+        ${todo.length>3 ? `<div class="home-meta" style="margin:8px 0 0;">+ ${todo.length-3} autre${todo.length-3>1?'s':''}</div>` : ''}
+        <div class="home-actions">
+          <button class="btn secondary" data-act="week" type="button">🗓 Ma semaine</button>
+          <button class="btn" data-act="weekshop" type="button">🛒 Courses</button>
+        </div>
+      `}
+    </section>
+
+    <div class="cat-grid">
+      ${['petitdej','repas','desserts'].map(c => `
+        <button class="cat-card c-${c}" data-act="cat" data-cat="${c}" type="button">
+          ${illHtml(HOME_ILL[c])}<b>${HOME_CAT_LABEL[c]}</b><span>${counts[c]} recette${counts[c]>1?'s':''}</span>
+        </button>`).join('')}
+    </div>
+
+    ${recent.length ? `
+    <section class="home-card">
+      <div class="home-label"><span>Ajoutées récemment</span></div>
+      <div class="recent">
+        ${recent.map(r=>`<button data-act="open" data-id="${escapeHtml(r.id)}" type="button">${escapeHtml(r.name)}<small>${r.macros.kcal} kcal · ${HOME_CAT_LABEL[r.category]||''}</small></button>`).join('')}
+      </div>
+    </section>` : ''}
+
+    <div class="home-actions" style="margin-top:0;">
+      <button class="btn" data-act="all" type="button">Toutes les recettes (${recipes.length})</button>
+      <button class="btn secondary" data-act="add" type="button">+ Ajouter</button>
+    </div>
+    <div class="home-foot" style="margin-top:10px;">
+      <button class="btn ghost" data-act="settings" type="button">⚙ Réglages</button>
+    </div>
+    <div class="footer-ill" aria-hidden="true">${['lemon','olives','figue','raisin','tasse','farfalle'].map(k=>illHtml(k)).join('')}</div>
+  `;
+}
+
+document.getElementById('homeContent').addEventListener('click', (e)=>{
+  const t = e.target.closest('[data-act]');
+  if(!t) return;
+  e.stopPropagation();
+  const act = t.dataset.act;
+  if(act==='open') openDetail(t.dataset.id);
+  else if(act==='reroll'){ pickIdea(true); renderHome(); }
+  else if(act==='search') showRecipes({focus:true});
+  else if(act==='all') showRecipes({});
+  else if(act==='cat') showRecipes({cat:t.dataset.cat});
+  else if(act==='add') openForm(null);
+  else if(act==='settings') openSettings();
+  else if(act==='week') openWeek();
+  else if(act==='weekshop'){ openWeek(); renderWeekShopping(); }
+});
+document.getElementById('homeContent').addEventListener('keydown', (e)=>{
+  if((e.key==='Enter' || e.key===' ') && e.target.matches('.idea')){ e.preventDefault(); openDetail(e.target.dataset.id); }
+});
+
+function switchView(v){
+  document.body.classList.toggle('view-home', v==='home');
+  document.body.classList.toggle('view-recipes', v==='recipes');
+  window.scrollTo(0,0);
+  if(v==='home') renderHome();
+}
+function showRecipes(opts){
+  opts = opts || {};
+  activeTab = opts.cat || 'all';
+  activeSubs = [];
+  document.getElementById('search').value = '';
+  render();
+  if(!document.body.classList.contains('view-recipes')){
+    history.pushState({view:'recipes'}, ''); viewPushed = true;
+  }
+  switchView('recipes');
+  if(opts.focus) document.getElementById('search').focus();
+}
+function showHome(){
+  if(viewPushed){ history.back(); }   // le popstate ramène à l'accueil
+  else switchView('home');
+}
+window.__goHomeFromBack = ()=>{
+  if(document.body.classList.contains('view-recipes')){ viewPushed = false; switchView('home'); return true; }
+  return false;
+};
+document.getElementById('backHome').addEventListener('click', showHome);
+document.body.classList.add('view-home');
 
 /* ---- Écran de chargement (une fois par session) ---- */
 (function(){
