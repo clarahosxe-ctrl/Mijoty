@@ -6,12 +6,12 @@
 <meta name="theme-color" content="#544027">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Recettes">
+<meta name="apple-mobile-web-app-title" content="Mijoty">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<title>Carnet de recettes</title>
+<title>Mijoty</title>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root{
@@ -514,11 +514,6 @@
   .empty .ill-wrap .ill{inset:0;width:100%;height:100%;}
   .footer-ill{display:flex;justify-content:center;gap:18px;margin-top:40px;color:var(--ink-soft);opacity:.35;pointer-events:none;}
   .footer-ill .ill{position:static;width:34px;height:34px;}
-  .card-ill{right:14px;bottom:12px;width:50px;height:50px;opacity:.17;pointer-events:none;}
-  .card-ill.tag-petitdej{color:var(--pink);} .card-ill.tag-repas{color:var(--indigo);} .card-ill.tag-desserts{color:var(--yellow);}
-  .card .tag,.card h3,.card .macro-row{position:relative;}
-  .detail-ill{position:static;flex:0 0 52px;width:52px;height:52px;margin:0 6px 0 auto;opacity:.5;}
-  .detail-ill.tag-petitdej{color:var(--pink);} .detail-ill.tag-repas{color:var(--indigo);} .detail-ill.tag-desserts{color:var(--yellow);}
   .empty-ill{position:static;display:inline-block;width:46px;height:46px;margin:0 6px 8px;color:var(--teal);opacity:.5;}
   @media (max-width:600px){.head-ill{width:100px;height:72px;}}
   @media (display-mode:standalone){ .install-hint{display:none !important;} }
@@ -558,8 +553,8 @@
   <header class="top">
     <div class="head-ill" aria-hidden="true"><i class="ill" style="--m:url(img/branche.png);left:0;top:0;width:44px;height:72px"></i><i class="ill" style="--m:url(img/citron-vert.png);left:52px;top:18px;width:56px;height:52px"></i></div>
     <img class="logo" src="icons/logo.png" alt="" width="56" height="56">
-    <div class="eyebrow">Carnet perso</div>
-    <h1>Mes recettes</h1>
+    <div class="eyebrow">Carnet de recettes</div>
+    <h1>Mijoty</h1>
     <div class="sub">Végétarien · œufs uniquement en préparation cuite · classées par moment du repas, avec les macros par portion.</div>
   </header>
 
@@ -934,7 +929,6 @@ function render(){
     <div class="card ${selectedIds.has(r.id)?'selected':''}" data-id="${r.id}" role="button" tabindex="0" aria-label="${escapeHtml(r.name)}">
       <span class="select-dot ${selectedIds.has(r.id)?'checked':''}" data-select="${r.id}" role="checkbox" aria-checked="${selectedIds.has(r.id)}" aria-label="Ajouter à ma liste de courses" tabindex="0" title="Ajouter à ma liste de courses">✓</span>
       ${r.image ? `<div class="thumb"><img src="${r.image}" alt=""></div>` : ''}
-      ${illHtml(illFor(r),'card-ill tag-'+r.category)}
       <span class="tag tag-${r.category}">${CATS[r.category]}${(r.subcategories&&r.subcategories.length) ? ' · ' + r.subcategories.join(', ') : ''}</span>
       <h3>${escapeHtml(r.name)}</h3>
       <div class="macro-row">
@@ -983,27 +977,6 @@ function sanitizeRecipe(r){
   };
 }
 
-/* Petits dessins par catégorie : un par recette, toujours le même (selon son id) */
-const CARD_ILLS = {
-  petitdej: ['cafetiere','tasse2','fraise','citron-demi'],
-  repas: ['pates','ravioli','tomate2','artichaut','piment','oignon','herbes','assiette','tomate-tranche','macaroni','conchiglie','penne','pizza'],
-  desserts: ['fraise','glace','figue2','citron-feuilles']
-};
-const ILL_KEYWORDS = [
-  [/fraise|fruits? rouges?|framboise/i,'fraise'], [/caf[ée]|moka|latte/i,'cafetiere'], [/\bth[ée]\b|tisane|chocolat chaud/i,'tasse2'],
-  [/pizza|tarte sal[ée]e|focaccia/i,'pizza'], [/ravioli|gnocchi|lasagne/i,'ravioli'], [/macaroni|penne|rigatoni|spaghetti|p[âa]tes?|nouilles?|tagliatelle|linguine/i,'pates'],
-  [/tomate/i,'tomate2'], [/artichaut/i,'artichaut'], [/piment|chili|poivron/i,'piment'], [/oignon|[ée]chalote/i,'oignon'],
-  [/figue/i,'figue2'], [/glace|sorbet|cr[èe]me glac/i,'glace'], [/citron|limonade/i,'citron-feuilles'], [/persil|basilic|herbes?|pesto|menthe/i,'herbes'],
-  [/curry|riz|risotto|buddha|bowl|dahl|dal/i,'assiette']
-];
-function illFor(r){
-  const name = r.name || '';
-  for(const [re, ill] of ILL_KEYWORDS) if(re.test(name)) return ill;
-  let set = CARD_ILLS[r.category] || CARD_ILLS.repas;
-  if(r.category==='petitdej') set = (r.subcategories||[]).includes('Salé') ? ['cafetiere','tasse2','tomate-tranche','herbes'] : ['fraise','tasse2','cafetiere','citron-demi'];
-  let h = 0; for(const ch of String(r.id)) h = (h*31 + ch.charCodeAt(0)) >>> 0;
-  return set[h % set.length];
-}
 function illHtml(name, cls){ return `<i class="ill ${cls||''}" style="--m:url(img/${name}.png)"></i>`; }
 
 function escapeHtml(s){
@@ -1021,7 +994,6 @@ function openDetail(id){
         <span class="detail-tag tag-${r.category}">${CATS[r.category]}${(r.subcategories&&r.subcategories.length) ? ' · ' + r.subcategories.join(', ') : ''} · ${r.servings} portion${r.servings>1?'s':''}</span>
         <h2>${escapeHtml(r.name)}</h2>
       </div>
-      ${illHtml(illFor(r),'detail-ill tag-'+r.category)}
       <button class="close" id="detailClose">✕</button>
     </div>
     ${r.image ? `<img class="detail-image" src="${r.image}" alt="">` : ''}
@@ -1399,7 +1371,7 @@ async function exportJson(){
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   const file = new File([blob], 'recettes.json', {type:'application/json'});
   try{
-    if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:'Mes recettes'}); return; }
+    if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:'Mijoty'}); return; }
   }catch(e){ if(e && e.name==='AbortError') return; }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

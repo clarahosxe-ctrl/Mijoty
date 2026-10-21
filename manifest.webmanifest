@@ -1,6 +1,6 @@
 {
-  "name": "Carnet de recettes",
-  "short_name": "Recettes",
+  "name": "Mijoty",
+  "short_name": "Mijoty",
   "description": "Mon carnet de recettes végétariennes avec macros, planning de la semaine et liste de courses.",
   "lang": "fr",
   "start_url": "./index.html",

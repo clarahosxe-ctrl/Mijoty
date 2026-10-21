@@ -1,4 +1,4 @@
-# Carnet de recettes — application mobile (PWA)
+# Mijoty — carnet de recettes (application mobile PWA)
 
 Application installable sur téléphone (Android et iPhone), qui fonctionne hors ligne.
 Recettes végétariennes classées par moment du repas, avec macros, planning de la semaine

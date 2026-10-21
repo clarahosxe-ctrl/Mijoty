@@ -1,4 +1,4 @@
-const CACHE = 'carnet-recettes-v8';
+const CACHE = 'mijoty-v9';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest', './recipes.json',
   './fonts/fonts.css', './fonts/Inter.woff2',
