@@ -15,6 +15,6 @@ Test local : `python3 -m http.server 8000` puis http://localhost:8000.
 ## Fonctionnalités
 - Recettes, recherche, filtres, favoris de la semaine, liste de courses, ajout / édition / suppression.
 - Hors ligne (service worker), polices embarquées, plein écran, icône.
-- Données stockées sur l'appareil ; **Exporter / Importer** (JSON, partage natif sur mobile) pour sauvegarder ou changer de téléphone.
+- Données stockées sur l'appareil (IndexedDB, avec migration automatique depuis l'ancien stockage) ; recettes de départ dans `recipes.json` ; **Exporter / Importer** (JSON, partage natif sur mobile) pour sauvegarder ou changer de téléphone.
 - Import de recettes depuis des captures d'écran via l'API Claude : ⚙ Réglages → coller sa clé API
   (stockée uniquement sur l'appareil).
