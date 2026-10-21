@@ -493,6 +493,28 @@
   :focus-visible{outline:2px solid var(--indigo);outline-offset:2px;}
   .card:focus-visible{outline-offset:3px;}
   @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ---- Illustrations (dessins en masque : la couleur suit le texte) ---- */
+  .ill{position:absolute;display:block;background:currentColor;
+       -webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;}
+  #splash{position:fixed;inset:0;z-index:100;background:#728356;color:#F4EED9;overflow:hidden;
+          transition:opacity .45s ease, visibility .45s;}
+  #splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .splash-stage{position:absolute;left:50%;top:50%;width:max(100vw,56.25vh);aspect-ratio:9/16;transform:translate(-50%,-50%);}
+  .ill.sp{opacity:0;animation:spIn .7s ease forwards;}
+  .splash-logo{position:absolute;left:50%;top:47%;width:30%;height:auto;aspect-ratio:1;border-radius:24%;
+               transform:translate(-50%,-50%);box-shadow:0 12px 40px rgba(0,0,0,.25);
+               opacity:0;animation:spLogo .8s .35s ease forwards;}
+  @keyframes spIn{from{opacity:0;transform:translateY(10px) scale(.96);}to{opacity:.95;transform:none;}}
+  @keyframes spLogo{from{opacity:0;transform:translate(-50%,-46%) scale(.9);}to{opacity:1;transform:translate(-50%,-50%);}}
+  header.top{position:relative;}
+  .head-ill{position:absolute;top:0;right:0;width:130px;height:90px;color:var(--teal);opacity:.32;pointer-events:none;}
+  .head-ill .ill{position:absolute;}
+  .empty .ill-wrap{position:relative;display:block;width:90px;height:90px;margin:0 auto 14px;color:var(--teal);opacity:.45;}
+  .empty .ill-wrap .ill{inset:0;width:100%;height:100%;}
+  .footer-ill{display:flex;justify-content:center;gap:18px;margin-top:40px;color:var(--ink-soft);opacity:.35;pointer-events:none;}
+  .footer-ill .ill{position:static;width:34px;height:34px;}
+  @media (max-width:600px){.head-ill{width:100px;height:72px;}}
   @media (display-mode:standalone){ .install-hint{display:none !important;} }
 
   /* ---- Look moderne : sans empattement, formes douces ---- */
@@ -525,8 +547,10 @@
 </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true"><div class="splash-stage"><i class="ill sp" style="--m:url(img/lemon.png);left:13.24%;top:6.82%;width:18.70%;aspect-ratio:202/227;animation-delay:0.10s"></i><i class="ill sp" style="--m:url(img/tomate.png);left:45.56%;top:10.16%;width:15.09%;aspect-ratio:163/164;animation-delay:0.16s"></i><i class="ill sp" style="--m:url(img/palmier.png);left:74.17%;top:5.62%;width:15.83%;aspect-ratio:171/222;animation-delay:0.22s"></i><i class="ill sp" style="--m:url(img/branche.png);left:19.07%;top:21.51%;width:16.76%;aspect-ratio:181/315;animation-delay:0.28s"></i><i class="ill sp" style="--m:url(img/olives.png);left:62.13%;top:25.73%;width:19.91%;aspect-ratio:215/256;animation-delay:0.34s"></i><i class="ill sp" style="--m:url(img/haricot.png);left:79.54%;top:34.17%;width:10.65%;aspect-ratio:115/269;animation-delay:0.40s"></i><i class="ill sp" style="--m:url(img/figue.png);left:64.81%;top:52.66%;width:18.70%;aspect-ratio:202/230;animation-delay:0.46s"></i><i class="ill sp" style="--m:url(img/raisin.png);left:25.37%;top:63.65%;width:27.69%;aspect-ratio:299/266;animation-delay:0.52s"></i><i class="ill sp" style="--m:url(img/tasse.png);left:59.35%;top:72.81%;width:18.24%;aspect-ratio:197/155;animation-delay:0.58s"></i><i class="ill sp" style="--m:url(img/citron-vert.png);left:15.83%;top:79.38%;width:18.06%;aspect-ratio:195/176;animation-delay:0.64s"></i><i class="ill sp" style="--m:url(img/farfalle.png);left:73.52%;top:84.27%;width:15.83%;aspect-ratio:171/128;animation-delay:0.70s"></i><img class="splash-logo" src="icons/logo-320.png" alt="" width="160" height="160"></div></div>
 <div class="wrap">
   <header class="top">
+    <div class="head-ill" aria-hidden="true"><i class="ill" style="--m:url(img/branche.png);left:0;top:0;width:44px;height:72px"></i><i class="ill" style="--m:url(img/citron-vert.png);left:52px;top:18px;width:56px;height:52px"></i></div>
     <img class="logo" src="icons/logo.png" alt="" width="56" height="56">
     <div class="eyebrow">Carnet perso</div>
     <h1>Mes recettes</h1>
@@ -547,6 +571,7 @@
 
   <div id="grid" class="grid"></div>
   <div class="status" id="status"></div>
+  <div class="footer-ill" aria-hidden="true"><i class="ill" style="--m:url(img/lemon.png)"></i><i class="ill" style="--m:url(img/olives.png)"></i><i class="ill" style="--m:url(img/figue.png)"></i><i class="ill" style="--m:url(img/raisin.png)"></i><i class="ill" style="--m:url(img/tasse.png)"></i><i class="ill" style="--m:url(img/farfalle.png)"></i></div>
 </div>
 
 <button class="fab" id="addFab" title="Ajouter une recette">+</button>
@@ -896,7 +921,7 @@ function render(){
     );
   }
   if(list.length===0){
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">Aucune recette ici pour l'instant. Ajoute-en une avec le bouton +.</div>`;
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;"><span class="ill-wrap"><i class="ill" style="--m:url(img/figue.png)"></i></span>Aucune recette ici pour l'instant. Ajoute-en une avec le bouton +.</div>`;
     return;
   }
   grid.innerHTML = list.map(r => `
@@ -2093,7 +2118,20 @@ function copyShoppingList(items){
   }
 }
 
-loadRecipes();
+/* ---- Écran de chargement (une fois par session) ---- */
+(function(){
+  const sp = document.getElementById('splash');
+  let seen = false;
+  try{ seen = sessionStorage.getItem('splash-seen') === '1'; sessionStorage.setItem('splash-seen','1'); }catch(e){}
+  if(seen){ sp.remove(); return; }
+  const t0 = performance.now();
+  window.__hideSplash = ()=>{
+    const wait = Math.max(0, 1500 - (performance.now() - t0));
+    setTimeout(()=>{ sp.classList.add('hide'); setTimeout(()=>sp.remove(), 600); }, wait);
+  };
+})();
+
+loadRecipes().finally(()=>{ if(window.__hideSplash) window.__hideSplash(); });
 loadWeekPlan();
 loadWeekShopChecked();
 </script>

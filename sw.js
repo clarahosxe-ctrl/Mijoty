@@ -1,8 +1,9 @@
-const CACHE = 'carnet-recettes-v6';
+const CACHE = 'carnet-recettes-v7';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest', './recipes.json',
   './fonts/fonts.css', './fonts/Inter.woff2',
-  './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './icons/logo.png'
+  './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './icons/logo.png', './icons/logo-320.png',
+  './img/lemon.png', './img/tomate.png', './img/branche.png', './img/olives.png', './img/haricot.png', './img/figue.png', './img/raisin.png', './img/tasse.png', './img/citron-vert.png', './img/farfalle.png', './img/palmier.png'
 ];
 
 self.addEventListener('install', e => {
