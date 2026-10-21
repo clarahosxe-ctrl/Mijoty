@@ -1,4 +1,4 @@
-const CACHE = 'mijoty-v12';
+const CACHE = 'mijoty-v13';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest', './recipes.json',
   './fonts/fonts.css', './fonts/Inter.woff2',
