@@ -1,9 +1,9 @@
-const CACHE = 'carnet-recettes-v7';
+const CACHE = 'carnet-recettes-v8';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest', './recipes.json',
   './fonts/fonts.css', './fonts/Inter.woff2',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './icons/logo.png', './icons/logo-320.png',
-  './img/lemon.png', './img/tomate.png', './img/branche.png', './img/olives.png', './img/haricot.png', './img/figue.png', './img/raisin.png', './img/tasse.png', './img/citron-vert.png', './img/farfalle.png', './img/palmier.png'
+  './img/lemon.png', './img/tomate.png', './img/branche.png', './img/olives.png', './img/haricot.png', './img/figue.png', './img/raisin.png', './img/tasse.png', './img/citron-vert.png', './img/farfalle.png', './img/palmier.png', './img/artichaut.png', './img/assiette.png', './img/cafetiere.png', './img/citron-demi.png', './img/citron-feuilles.png', './img/conchiglie.png', './img/cuillere.png', './img/figue2.png', './img/fourchette.png', './img/fraise.png', './img/glace.png', './img/herbes.png', './img/macaroni.png', './img/oignon.png', './img/pates.png', './img/penne.png', './img/piment.png', './img/pizza.png', './img/ravioli.png', './img/tasse2.png', './img/tomate-tranche.png', './img/tomate2.png'
 ];
 
 self.addEventListener('install', e => {
