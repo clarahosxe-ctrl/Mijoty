@@ -461,7 +461,8 @@
   html{-webkit-text-size-adjust:100%;touch-action:pan-x pan-y;}
   body{-webkit-touch-callout:none;}
   input,textarea,select{-webkit-touch-callout:default;-webkit-user-select:text;user-select:text;}
-  body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none;}
+  html,body{overscroll-behavior:none;}
+  body{-webkit-tap-highlight-color:transparent;}
   .wrap{padding-top:calc(32px + env(safe-area-inset-top));padding-bottom:calc(110px + env(safe-area-inset-bottom));
         padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right));}
   .fab{bottom:calc(24px + env(safe-area-inset-bottom));right:calc(24px + env(safe-area-inset-right));}
@@ -474,13 +475,13 @@
   @media (max-width:600px){
     h1{font-size:30px;}
     .wrap{padding-top:calc(20px + env(safe-area-inset-top));}
-    .tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;}
+    .tabs{overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-x;-webkit-overflow-scrolling:touch;}
     .tabs::-webkit-scrollbar{display:none;}
     .tab{white-space:nowrap;flex-shrink:0;margin-right:16px;}
-    .subtabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;}
+    .subtabs{overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-x;}
+    .tab{top:0;margin-bottom:-1px;}
     .chipfilter{white-space:nowrap;flex-shrink:0;}
-    .toolbar{display:grid;grid-template-columns:1fr 1fr 44px;gap:10px;}
-    .toolbar .search{grid-column:1/-1;}
+    .toolbar{display:grid;grid-template-columns:1fr 44px;gap:10px;}
     .toolbar .btn{padding:11px 10px;}
     .toolbar .gear{width:44px;height:100%;min-height:44px;}
     .grid{grid-template-columns:1fr;}
@@ -552,6 +553,7 @@
   .recent::-webkit-scrollbar{display:none;}
   .recent button{flex:0 0 170px;text-align:left;background:var(--bg);border:none;border-radius:14px;padding:12px;font:500 14px 'Inter',system-ui,sans-serif;color:var(--ink);cursor:pointer;}
   .recent button small{display:block;margin-top:4px;color:var(--ink-soft);font-weight:400;font-size:12px;}
+  .data-btns{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
   .home-foot{display:flex;gap:8px;margin:6px 0 0;}
   .home-foot .btn{flex:1;}
 
@@ -638,10 +640,7 @@
   <div class="subtabs" id="subtabs"></div>
 
   <div class="toolbar">
-    <input class="search" id="search" type="text" placeholder="Chercher une recette, un ingrédient...">
-    <button class="btn ghost" id="exportBtn">Exporter</button>
-    <button class="btn ghost" id="importJsonBtn">Importer</button>
-    <input type="file" id="importJsonFile" accept="application/json,.json" style="display:none">
+    <input class="search" id="search" type="text" placeholder="Recette ou ingrédient…">
     <button class="gear" id="settingsBtn" title="Réglages" aria-label="Réglages">⚙</button>
   </div>
 
@@ -688,8 +687,13 @@
     <label>Modèle</label>
     <input type="text" id="s_model" autocomplete="off" autocapitalize="off" spellcheck="false">
     <div class="section-title">Données</div>
-    <div class="hint" id="s_version" style="margin-bottom:6px;">Mijoty · version 14</div>
-    <div class="hint" id="s_storageInfo">Les recettes sont enregistrées sur l'appareil. Pense à les exporter de temps en temps.</div>
+    <div class="hint" id="s_version" style="margin-bottom:6px;">Mijoty · version 15</div>
+    <div class="hint" id="s_storageInfo">Tes recettes et ta semaine sont enregistrées sur cet appareil. Exporte-les de temps en temps pour garder une sauvegarde, ou pour les retrouver sur un autre téléphone.</div>
+    <div class="data-btns">
+      <button class="btn ghost" id="exportBtn" type="button">⬇ Exporter mes données</button>
+      <button class="btn ghost" id="importJsonBtn" type="button">⬆ Importer des données</button>
+      <input type="file" id="importJsonFile" accept="application/json,.json" style="display:none">
+    </div>
     <div class="modal-actions"><button class="btn" id="settingsSave">Enregistrer</button><button class="btn ghost" id="settingsCancel">Fermer</button></div>
   </div>
 </div>
